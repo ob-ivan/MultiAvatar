@@ -14,7 +14,7 @@ NB. Please do not expect it to work on forums or BBS that require avatar to be
 uploaded or that store images on server side. MultiAvatar's response is renewed
 upon request to your hosting, caching its result makes no sense.
 
-If you like the screipt and would like to fork it you're welcome to do so.
+If you like the script and would like to fork it you're welcome to do so.
 But then please DO NOT add any image files into repository.
 GitHub provides a great service for your code, and not your personal image hosting.
 
