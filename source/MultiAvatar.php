@@ -2,33 +2,53 @@
 define ('KEY_FILENAME',  0);
 define ('KEY_EXTENSION', 1);
 
-if (! is_readable ($dn = dirname(__FILE__) . '/' . ($subdn = 'avatars'))) {
+if (! is_readable ($dn = dirname(__FILE__) . '/' . ($subdn = 'avatars')))
+{
     print 'Directory "' . $subdn . '" not found!';
     die;
 }
-$flfn = $dn . '/' . ($subflfn = '.filelist');
+$subflfn = '.filelist';
+$flfn = $dn . '/' . $subflfn;
 $reset = array_key_exists ('reset_filelist', $_POST) && $_POST['reset_filelist'] == 1;
 $files = false;
-if (is_readable ($flfn) || ! $reset) {
+if (is_readable ($flfn) || ! $reset)
+{
     $files = @unserialize (@file_get_contents ($flfn));
 }
-if (empty ($files) || $reset) {
+if (empty ($files) || $reset)
+{
     $dir = dir ($dn);
     $files = array ();
     $bad = array ('.', '..', $subflfn);
     $good = array ('png', 'jpg', 'gif');
-    while (false !== ($f = $dir->read())) {
-        if (in_array ($f, $bad)) continue;
-        if (! in_array ($ext = preg_replace ('/^.*\.([a-z]{3,4})$/i', '$1', $f), $good)) continue;
+    while (true)
+    {
+        $f = $dir->read();
+        if ($f === false)
+        {
+            break;
+        }
+        
+        if (in_array ($f, $bad))
+        {
+            continue;
+        }
+        $ext = preg_replace ('/^.*\.([a-z]{3,4})$/i', '$1', $f);
+        if (! in_array ($ext, $good))
+        {
+            continue;
+        }
         $files[] = array (KEY_FILENAME => $f, KEY_EXTENSION => $ext == 'jpg' ? 'jpeg' : $ext);
     }
     file_put_contents ($flfn, serialize ($files));
 }
-if ($reset) {
+if ($reset)
+{
     header ('Location: ' . $_SERVER['PHP_SELF']);
     die;
 }
-if (empty ($files)) {
+if (empty ($files))
+{
     print 'Directory "' . $subdn . '" is empty!';
     die;
 }
